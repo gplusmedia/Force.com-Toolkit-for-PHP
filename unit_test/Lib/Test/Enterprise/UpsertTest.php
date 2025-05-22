@@ -22,9 +22,6 @@ class Lib_Test_Enterprise_UpsertTest extends Lib_Test_TestAbstractEnterprise
 
         $objectType = 'Contact';
 
-        $createFields = array(
-        );
-
         $sObject = new stdClass();
         $sObject->FirstName = 'George';
         $sObject->LastName = 'Smith';

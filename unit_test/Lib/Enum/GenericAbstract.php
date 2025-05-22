@@ -2,6 +2,8 @@
 
 abstract class Lib_Enum_GenericAbstract
 {
+    public $_values;
+    public $values;
     /**
      * Get style by id.
      *
@@ -11,7 +13,7 @@ abstract class Lib_Enum_GenericAbstract
     public function getById($id)
     {
         $id = (int)$id;
-        if ($id <= 0 || $id > sizeof($this->_values)) {
+        if ($id <= 0 || $id > count($this->_values)) {
             return null;
         }
 
@@ -34,7 +36,7 @@ abstract class Lib_Enum_GenericAbstract
             return false;
         }
 
-        return $id <= sizeof($this->_values);
+        return $id <= count($this->_values);
     }
 
     /**

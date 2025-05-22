@@ -15,7 +15,7 @@ class Lib_Test_Enterprise_QueryMoreTest extends Lib_Test_TestAbstractEnterprise
         $this->_mySforceConnection->setQueryOptions($options);
         $response = $this->_mySforceConnection->query($query);
 
-        !$done = false;
+        $done = false;
         echo "Size of records:  ".$response ->size."\n";
 
         if ($response->size > 0) {

@@ -25,7 +25,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-require_once('SforceBaseClient.php');
+require_once(__DIR__ . '/SforceBaseClient.php');
 //require_once ('SforceEmail.php');
 
 
@@ -115,7 +115,7 @@ class SforcePartnerClient extends SforceBaseClient
      */
     public function merge($mergeRequest)
     {
-        if (isset($mergeRequest->masterRecord)) {
+        if (property_exists($mergeRequest, 'masterRecord') && $mergeRequest->masterRecord !== null) {
             if (isset($mergeRequest->masterRecord->fields)) {
                 $mergeRequest->masterRecord->any = $this->_convertToAny($mergeRequest->masterRecord->fields);
             }
@@ -123,6 +123,7 @@ class SforcePartnerClient extends SforceBaseClient
             $arg->request = $mergeRequest;
             return $this->_merge($arg);
         }
+        return null;
     }
 
     /**
@@ -135,7 +136,7 @@ class SforcePartnerClient extends SforceBaseClient
             $messages = array();
             foreach ($request as $r) {
                 $email = new SoapVar($r, SOAP_ENC_OBJECT, 'SingleEmailMessage', $this->namespace);
-                array_push($messages, $email);
+                $messages[] = $email;
             }
             $arg->messages = $messages;
             return parent::_sendEmail($arg);
@@ -155,7 +156,7 @@ class SforcePartnerClient extends SforceBaseClient
             $messages = array();
             foreach ($request as $r) {
                 $email = new SoapVar($r, SOAP_ENC_OBJECT, 'MassEmailMessage', $this->namespace);
-                array_push($messages, $email);
+                $messages[] = $email;
             }
             $arg->messages = $messages;
             return parent::_sendEmail($arg);
@@ -228,11 +229,11 @@ class SforcePartnerClient extends SforceBaseClient
         if (is_array($response)) {
             foreach ($response as $r) {
                 $sobject = new SObject($r);
-                array_push($arr, $sobject);
+                $arr[] = $sobject;
             };
         } else {
             $sobject = new SObject($response);
-            array_push($arr, $sobject);
+            $arr[] = $sobject;
         }
         return $arr;
     }

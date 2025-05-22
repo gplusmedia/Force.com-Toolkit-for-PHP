@@ -1,8 +1,8 @@
 <?php
 
-require_once('PHPUnit/Framework/TestCase.php');
-require_once('../soapclient/SforcePartnerClient.php');
-require_once('../soapclient/SforceHeaderOptions.php');
+require_once(__DIR__ . '/PHPUnit/Framework/TestCase.php');
+require_once(__DIR__ . '/../soapclient/SforcePartnerClient.php');
+require_once(__DIR__ . '/../soapclient/SforceHeaderOptions.php');
 
 /*
  * Copyright (c) 2007, salesforce.com, inc.
@@ -44,9 +44,9 @@ class SforcePartnerClientTest extends PHPUnit_Framework_TestCase
     private $wsdl = '../soapclient/partner.wsdl.xml';
     private $username = 'username@sample.com';
     private $password = 'changeme';
-    protected $mySforceConnection = null;
-    protected $mylogin = null;
-    protected $theId = null;
+    protected $mySforceConnection;
+    protected $mylogin;
+    protected $theId;
 
     public function deleteAll($queryResult)
     {
@@ -88,8 +88,8 @@ class SforcePartnerClientTest extends PHPUnit_Framework_TestCase
             $queryOptions = new QueryOptions(300);
             $createQuery = 'SELECT Id from Contact where FirstName = \'DELETE_ME\'';
             $leadQuery = 'SELECT Id from Lead where FirstName = \'DELETE_ME\'';
-            $createQueryResult = $this->mySforceConnection->query($createQuery, $queryOptions);
-            $leadQueryResult = $this->mySforceConnection->query($leadQuery, $queryOptions);
+            $createQueryResult = $this->mySforceConnection->query($createQuery);
+            $leadQueryResult = $this->mySforceConnection->query($leadQuery);
             if ($createQueryResult->size > 0) {
                 echo 'Deleting '.$createQueryResult->size." contacts.\r\n";
                 $this->deleteAll($createQueryResult);
@@ -175,7 +175,7 @@ class SforcePartnerClientTest extends PHPUnit_Framework_TestCase
               'Contact'
               ));
             $this->assertNotNull($response);
-            $this->assertEquals(2, sizeof($response));
+            $this->assertEquals(2, count($response));
         } catch (SoapFault $fault) {
             $this->fail($fault->faultstring);
         }
@@ -211,7 +211,7 @@ class SforcePartnerClientTest extends PHPUnit_Framework_TestCase
         try {
             $response = $this->mySforceConnection->describeTabs();
             $this->assertNotNull($response);
-            $this->assertTrue(sizeof($response) > 0);
+            $this->assertTrue(count($response) > 0);
         } catch (SoapFault $fault) {
             $this->fail($fault->faultstring);
         }
@@ -322,7 +322,7 @@ class SforcePartnerClientTest extends PHPUnit_Framework_TestCase
         try {
             $response = $this->mySforceConnection->query($query, $queryOptions);
             $this->assertNotNull($response);
-            $this->assertTrue(sizeof($response) > 0);
+            $this->assertTrue(count($response) > 0);
         } catch (SoapFault $fault) {
             $this->fail($fault->faultstring);
         }

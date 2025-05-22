@@ -61,7 +61,7 @@ class Lib_Test_Partner_FieldsToNullTest extends Lib_Test_TestAbstractPartner
         $sObject->fields = $fields;
         $sObject->type = 'Contact';
 
-        $updateResult = $this->_mySforceConnection->update(array($sObject));
+        $this->_mySforceConnection->update(array($sObject));
 
         $queryResult = $this->_mySforceConnection->retrieve("FirstName, LastName, Phone", "Contact", $createResponse->id);
         echo "***** After fieldsToNull\r\n";

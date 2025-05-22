@@ -25,10 +25,10 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-require_once('SforceEmail.php');
-require_once('SforceProcessRequest.php');
-require_once('ProxySettings.php');
-require_once('SforceHeaderOptions.php');
+require_once(__DIR__ . '/SforceEmail.php');
+require_once(__DIR__ . '/SforceProcessRequest.php');
+require_once(__DIR__ . '/ProxySettings.php');
+require_once(__DIR__ . '/SforceHeaderOptions.php');
 
 /**
  * This file contains one class.
@@ -111,8 +111,6 @@ class SforceBaseClient
      */
     public function createConnection($wsdl, $proxy = null, $soap_options = array())
     {
-        $phpversion = substr(phpversion(), 0, strpos(phpversion(), '-'));
-
         $soapClientArray = array_merge(array(
             'user_agent' => 'salesforce-toolkit-php/'.$this->version,
             'encoding' => 'utf-8',
@@ -188,7 +186,7 @@ class SforceBaseClient
     public function logout()
     {
         $this->setHeaders("logout");
-        $arg = new stdClass();
+        new stdClass();
         return $this->sforce->logout();
     }
 
@@ -200,7 +198,7 @@ class SforceBaseClient
     public function invalidateSessions()
     {
         $this->setHeaders("invalidateSessions");
-        $arg = new stdClass();
+        new stdClass();
         $this->logout();
         return $this->sforce->invalidateSessions();
     }
@@ -238,7 +236,7 @@ class SforceBaseClient
 
         $header = $this->callOptions;
         if ($header != null) {
-            array_push($header_array, $header);
+            $header_array[] = $header;
         }
 
         if ($call == "create" ||
@@ -248,14 +246,14 @@ class SforceBaseClient
         ) {
             $header = $this->assignmentRuleHeader;
             if ($header != null) {
-                array_push($header_array, $header);
+                $header_array[] = $header;
             }
         }
 
         if ($call == "login") {
             $header = $this->loginScopeHeader;
             if ($header != null) {
-                array_push($header_array, $header);
+                $header_array[] = $header;
             }
         }
 
@@ -266,7 +264,7 @@ class SforceBaseClient
         ) {
             $header = $this->emailHeader;
             if ($header != null) {
-                array_push($header_array, $header);
+                $header_array[] = $header;
             }
         }
 
@@ -279,14 +277,14 @@ class SforceBaseClient
         ) {
             $header = $this->mruHeader;
             if ($header != null) {
-                array_push($header_array, $header);
+                $header_array[] = $header;
             }
         }
 
         if ($call == "delete") {
             $header = $this->userTerritoryDeleteHeader;
             if ($header != null) {
-                array_push($header_array, $header);
+                $header_array[] = $header;
             }
         }
 
@@ -295,7 +293,7 @@ class SforceBaseClient
         $call == "retrieve") {
             $header = $this->queryHeader;
             if ($header != null) {
-                array_push($header_array, $header);
+                $header_array[] = $header;
             }
         }
 
@@ -308,7 +306,7 @@ class SforceBaseClient
         if (in_array($call, $allowFieldTruncationHeaderCalls)) {
             $header = $this->allowFieldTruncationHeader;
             if ($header != null) {
-                array_push($header_array, $header);
+                $header_array[] = $header;
             }
         }
 
@@ -316,7 +314,7 @@ class SforceBaseClient
         if ($call == 'describeSObject' || $call == 'describeSObjects') {
             $header = $this->localeOptions;
             if ($header != null) {
-                array_push($header_array, $header);
+                $header_array[] = $header;
             }
         }
 
@@ -331,7 +329,7 @@ class SforceBaseClient
         if (in_array($call, $packageVersionHeaderCalls)) {
             $header = $this->packageVersionHeader;
             if ($header != null) {
-                array_push($header_array, $header);
+                $header_array[] = $header;
             }
         }
 
@@ -461,7 +459,7 @@ class SforceBaseClient
         if ($header != null) {
             $headerData = array('packageVersions' => array());
 
-            foreach ($header->packageVersions as $key => $hdrElem) {
+            foreach ($header->packageVersions as $hdrElem) {
                 $headerData['packageVersions'][] = array(
                     'majorNumber' => $hdrElem->majorNumber,
                     'minorNumber' => $hdrElem->minorNumber,
@@ -569,7 +567,7 @@ class SforceBaseClient
             $messages = array();
             foreach ($request as $r) {
                 $email = new SoapVar($r, SOAP_ENC_OBJECT, 'SingleEmailMessage', $this->namespace);
-                array_push($messages, $email);
+                $messages[] = $email;
             }
             $arg = new stdClass();
             $arg->messages = $messages;
@@ -586,7 +584,7 @@ class SforceBaseClient
             $messages = array();
             foreach ($request as $r) {
                 $email = new SoapVar($r, SOAP_ENC_OBJECT, 'MassEmailMessage', $this->namespace);
-                array_push($messages, $email);
+                $messages[] = $email;
             }
             $arg = new stdClass();
             $arg->messages = $messages;
@@ -993,6 +991,7 @@ class SforceBaseClient
 
 class SforceSearchResult
 {
+    public $records;
     public $searchRecords;
 
     public function __construct($response)
@@ -1006,11 +1005,11 @@ class SforceSearchResult
                 if (is_array($response->searchRecords)) {
                     foreach ($response->searchRecords as $record) {
                         $sobject = new SObject($record->record);
-                        array_push($this->searchRecords, $sobject);
+                        $this->searchRecords[] = $sobject;
                     };
                 } else {
                     $sobject = new SObject($response->searchRecords->record);
-                    array_push($this->records, $sobject);
+                    $this->records[] = $sobject;
                 }
             }
         }
@@ -1024,17 +1023,17 @@ class QueryResult implements Iterator
     public $records;
     public $size;
 
-    public $pointer; // Current iterator location
-    private $sf; // SOAP Client
+    /**
+     * @var int
+     */
+    public $pointer = 0; // Current iterator location
+    private $sf = false; // SOAP Client
 
     public function __construct($response)
     {
         $this->queryLocator = $response->queryLocator;
         $this->done = $response->done;
         $this->size = $response->size;
-
-        $this->pointer = 0;
-        $this->sf = false;
 
         if ($response instanceof QueryResult) {
             $this->records = $response->records;
@@ -1043,10 +1042,10 @@ class QueryResult implements Iterator
             if (isset($response->records)) {
                 if (is_array($response->records)) {
                     foreach ($response->records as $record) {
-                        array_push($this->records, $record);
+                        $this->records[] = $record;
                     };
                 } else {
-                    array_push($this->records, $record);
+                    $this->records[] = $record;
                 }
             }
         }
@@ -1140,88 +1139,75 @@ class SObject
                         // this is for parent to child relationships
                         $this->queryResult = new QueryResult($response->any);
                     }
-
-                } else {
+                } elseif (is_array($response->any)) {
                     // If ANY is an array
-                    if (is_array($response->any)) {
-                        // Loop through each and perform some action.
-                        $anArray = array();
-
-                        // Modify the foreach to have $key=>$value
-                        // Added on 28th April 2008
-                        foreach ($response->any as $key => $item) {
-                            if ($item instanceof stdClass) {
-                                if ($this->isSObject($item)) {
-                                    $sobject = new SObject($item);
-                                    // make an associative array instead of a numeric one
-                                    $anArray[$key] = $sobject;
-                                } else {
-                                    // this is for parent to child relationships
-                                    //$this->queryResult = new QueryResult($item);
-                                    if (!isset($this->queryResult)) {
-                                        $this->queryResult = array();
-                                    }
-                                    array_push($this->queryResult, new QueryResult($item));
-                                }
+                    // Loop through each and perform some action.
+                    $anArray = array();
+                    // Modify the foreach to have $key=>$value
+                    // Added on 28th April 2008
+                    foreach ($response->any as $key => $item) {
+                        if ($item instanceof stdClass) {
+                            if ($this->isSObject($item)) {
+                                $sobject = new SObject($item);
+                                // make an associative array instead of a numeric one
+                                $anArray[$key] = $sobject;
                             } else {
-                                //$this->fields = $this->convertFields($item);
-
-                                if (strpos($item, 'sf:') === false) {
-                                    $currentXmlValue = sprintf('<sf:%s>%s</sf:%s>', $key, $item, $key);
-                                } else {
-                                    $currentXmlValue = $item;
+                                // this is for parent to child relationships
+                                //$this->queryResult = new QueryResult($item);
+                                if (!property_exists($this, 'queryResult') || $this->queryResult === null) {
+                                    $this->queryResult = array();
                                 }
-
-                                if (!isset($fieldsToConvert)) {
-                                    $fieldsToConvert = $currentXmlValue;
-                                } else {
-                                    $fieldsToConvert .= $currentXmlValue;
-                                }
+                                $this->queryResult[] = new QueryResult($item);
+                            }
+                        } else {
+                            //$this->fields = $this->convertFields($item);
+                            $currentXmlValue = strpos($item, 'sf:') === false ? sprintf('<sf:%s>%s</sf:%s>', $key, $item, $key) : $item;
+                            if (!isset($fieldsToConvert)) {
+                                $fieldsToConvert = $currentXmlValue;
+                            } else {
+                                $fieldsToConvert .= $currentXmlValue;
                             }
                         }
-
-                        if (isset($fieldsToConvert)) {
-                            // If this line is commented, then the fields becomes a stdclass object and does not have the name variable
-                            // In this case the foreach loop on line 252 runs successfuly
-                            $this->fields = $this->convertFields($fieldsToConvert);
-                        }
-
-                        if (sizeof($anArray) > 0) {
-                            // To add more variables to the the top level sobject
-                            foreach ($anArray as $key => $children_sobject) {
-                                $this->fields->$key = $children_sobject;
-                            }
-                            //array_push($this->fields, $anArray);
-                            // Uncommented on 28th April since all the sobjects have now been moved to the fields
-                            //$this->sobjects = $anArray;
-                        }
-
-                        /*
-                           $this->fields = $this->convertFields($response->any[0]);
-                           if (isset($response->any[1]->records)) {
-                           $anArray = array();
-                           if ($response->any[1]->size == 1) {
-                           $records = array (
-                           $response->any[1]->records
-                           );
-                           } else {
-                           $records = $response->any[1]->records;
-                           }
-                           foreach ($records as $record) {
-                           $sobject = new SObject($record);
-                           array_push($anArray, $sobject);
-                           }
-                           $this->sobjects = $anArray;
-                           } else {
-                           $anArray = array();
-                           $sobject = new SObject($response->any[1]);
-                           array_push($anArray, $sobject);
-                           $this->sobjects = $anArray;
-                           }
-                         */
-                    } else {
-                        $this->fields = $this->convertFields($response->any);
                     }
+                    if (isset($fieldsToConvert)) {
+                        // If this line is commented, then the fields becomes a stdclass object and does not have the name variable
+                        // In this case the foreach loop on line 252 runs successfuly
+                        $this->fields = $this->convertFields($fieldsToConvert);
+                    }
+                    if ($anArray !== []) {
+                        // To add more variables to the the top level sobject
+                        foreach ($anArray as $key => $children_sobject) {
+                            $this->fields->$key = $children_sobject;
+                        }
+                        //array_push($this->fields, $anArray);
+                        // Uncommented on 28th April since all the sobjects have now been moved to the fields
+                        //$this->sobjects = $anArray;
+                    }
+                    /*
+                      $this->fields = $this->convertFields($response->any[0]);
+                      if (isset($response->any[1]->records)) {
+                      $anArray = array();
+                      if ($response->any[1]->size == 1) {
+                      $records = array (
+                      $response->any[1]->records
+                      );
+                      } else {
+                      $records = $response->any[1]->records;
+                      }
+                      foreach ($records as $record) {
+                      $sobject = new SObject($record);
+                      array_push($anArray, $sobject);
+                      }
+                      $this->sobjects = $anArray;
+                      } else {
+                      $anArray = array();
+                      $sobject = new SObject($response->any[1]);
+                      array_push($anArray, $sobject);
+                      $this->sobjects = $anArray;
+                      }
+                    */
+                } else {
+                    $this->fields = $this->convertFields($response->any);
                 }
             } catch (Exception $e) {
                 var_dump('exception: ', $e);
@@ -1250,7 +1236,7 @@ class SObject
         $array = $this->xml2array('<Object xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'.$str.'</Object>', 2);
 
         $xml = new stdClass();
-        if (!count($array['Object'])) {
+        if (count($array['Object']) === 0) {
             return $xml;
         }
 
@@ -1287,14 +1273,11 @@ class SObject
         xml_parser_free($parser);
 
         if (!$xml_values) {
-            return;
+            return null;
         }//Hmm...
 
         //Initializations
         $xml_array = array();
-        $parents = array();
-        $opened_tags = array();
-        $arr = array();
 
         $current = &$xml_array;
 
@@ -1346,13 +1329,13 @@ class SObject
             if ($type == "open") {//The starting of the tag '<tag>'
                 $parent[$level - 1] = &$current;
 
-                if (!is_array($current) or (!in_array($tag, array_keys($current)))) { //Insert New tag
+                if (!is_array($current) || !in_array($tag, array_keys($current))) { //Insert New tag
                     $current[$tag] = $result;
                     $current = &$current[$tag];
 
                 } else { //There was another element with the same tag name
                     if (isset($current[$tag][0])) {
-                        array_push($current[$tag], $result);
+                        $current[$tag][] = $result;
                     } else {
                         $current[$tag] = array($current[$tag],$result);
                     }
@@ -1362,16 +1345,15 @@ class SObject
 
             } elseif ($type == "complete") { //Tags that ends in 1 line '<tag />'
                 //See if the key is already taken.
-                if (!isset($current[$tag])) { //New Key
+                if (!isset($current[$tag])) {
+                    //New Key
                     $current[$tag] = $result;
-
-                } else { //If taken, put all things inside a list(array)
-                    if ((is_array($current[$tag]) and $get_attributes == 0)//If it is already an array...
-                            or (isset($current[$tag][0]) and is_array($current[$tag][0]) and ($get_attributes == 1 || $get_attributes == 2))) {
-                        array_push($current[$tag], $result); // ...push the new element into that array.
-                    } else { //If it is not an array...
-                        $current[$tag] = array($current[$tag],$result); //...Make it an array using using the existing value and the new value
-                    }
+                } elseif (is_array($current[$tag]) && $get_attributes == 0 || isset($current[$tag][0]) && is_array($current[$tag][0]) && ($get_attributes == 1 || $get_attributes == 2)) {
+                    //If taken, put all things inside a list(array)
+                    $current[$tag][] = $result;
+                    // ...push the new element into that array.
+                } else { //If it is not an array...
+                    $current[$tag] = array($current[$tag],$result); //...Make it an array using using the existing value and the new value
                 }
 
             } elseif ($type == 'close') { //End of tag '</tag>'

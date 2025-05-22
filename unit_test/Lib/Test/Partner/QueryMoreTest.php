@@ -20,7 +20,7 @@ class Lib_Test_Partner_QueryMoreTest extends Lib_Test_TestAbstractPartner
 
         //		print_r($queryResult);
 
-        !$done = false;
+        $done = false;
 
         echo "Size of records:  ".$queryResult->size;
 

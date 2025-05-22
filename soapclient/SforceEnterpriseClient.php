@@ -25,7 +25,7 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-require_once('SforceBaseClient.php');
+require_once(__DIR__ . '/SforceBaseClient.php');
 /**
  * This file contains two classes.
  * @package SalesforceSoapClient
@@ -64,7 +64,7 @@ class SforceEnterpriseClient extends SforceBaseClient
 
             $soapObject = new SoapVar($sObject, SOAP_ENC_OBJECT, $type, $this->namespace);
             // FIX for fieldsToNull issue - allow array in fieldsToNull (STEP #2)
-            if ($xmlStr != '') {
+            if ($xmlStr !== '') {
                 $soapObject->enc_value->fieldsToNull = new SoapVar(new SoapVar($xmlStr, XSD_ANYXML), SOAP_ENC_ARRAY);
             }
             // ------
@@ -96,7 +96,7 @@ class SforceEnterpriseClient extends SforceBaseClient
             $soapObject = new SoapVar($sObject, SOAP_ENC_OBJECT, $type, $this->namespace);
 
             // FIX for fieldsToNull issue - allow array in fieldsToNull (STEP #2)
-            if ($xmlStr != '') {
+            if ($xmlStr !== '') {
                 $soapObject->enc_value->fieldsToNull = new SoapVar(new SoapVar($xmlStr, XSD_ANYXML), SOAP_ENC_ARRAY);
             }
             // ------
@@ -133,7 +133,7 @@ class SforceEnterpriseClient extends SforceBaseClient
 
             $soapObject = new SoapVar($sObject, SOAP_ENC_OBJECT, $type, $this->namespace);
             // FIX for fieldsToNull issue - allow array in fieldsToNull (STEP #2)
-            if ($xmlStr != '') {
+            if ($xmlStr !== '') {
                 $soapObject->enc_value->fieldsToNull = new SoapVar(new SoapVar($xmlStr, XSD_ANYXML), SOAP_ENC_ARRAY);
             }
             // ------

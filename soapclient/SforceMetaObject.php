@@ -25,10 +25,25 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-require_once('SforceFieldTypes.php');
+require_once(__DIR__ . '/SforceFieldTypes.php');
 
 class SforceCustomObject
 {
+    public $deploymentStatus;
+    public $description;
+    public $enableActivities;
+    public $enableDivisions;
+    public $enableHistory;
+    public $enableReports;
+    public $fields;
+    public $fullName;
+    public $gender;
+    public $household;
+    public $label;
+    public $nameField;
+    public $pluralLabel;
+    public $sharingModel;
+    public $startsWith;
     public function setDeploymentStatus($deploymentStatus)
     {
         $this->deploymentStatus = $deploymentStatus;
@@ -107,6 +122,34 @@ class SforceCustomObject
 
 class SforceCustomField
 {
+    public $caseSensitive;
+    public $defaultValue;
+    public $description;
+    public $displayFormat;
+    public $externalId;
+    public $formula;
+    public $formulaTreatBlankAs;
+    public $fullName;
+    public $inlineHelpText;
+    public $label;
+    public $length;
+    public $maskChar;
+    public $maskType;
+    public $picklist;
+    public $populateExistingRows;
+    public $precision;
+    public $referenceTo;
+    public $relationshipName;
+    public $required;
+    public $scale;
+    public $startingNumber;
+    public $summarizeField;
+    public $summaryFilterItems;
+    public $summaryForeignKey;
+    public $summaryOperation;
+    public $type;
+    public $unique;
+    public $visibleLines;
     public function setCaseSensitive($caseSensitive)
     {
         $this->caseSensitive = $caseSensitive;

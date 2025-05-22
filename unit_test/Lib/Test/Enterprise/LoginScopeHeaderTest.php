@@ -14,7 +14,7 @@ class Lib_Test_Enterprise_LoginScopeHeaderTest extends Lib_Test_TestAbstractEnte
         print_r($response);
 
         $this->_mySforceConnection = new SforceEnterpriseClient();
-        $mySoapClient = $this->_mySforceConnection->createConnection($this->getWSDL());
+        $this->_mySforceConnection->createConnection($this->getWSDL());
         //		$header = new LoginScopeHeader($response->organizationId, $this->_portalId);
 
         $header = new LoginScopeHeader(null, $this->_portalId);

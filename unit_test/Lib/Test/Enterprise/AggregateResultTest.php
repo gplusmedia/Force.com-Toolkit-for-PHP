@@ -17,7 +17,7 @@ class Lib_Test_Enterprise_AggregateResultTest extends Lib_Test_TestAbstractEnter
         print_r($response);
 
         echo "\n***** ".$this->getTestName()." response records: *****\n";
-        if (isset($response->records) && !empty($response->records)) {
+        if ($response->records !== null && !empty($response->records)) {
             foreach ($response->records as $key => $record) {
                 echo "\n***** $key *****\n";
                 if (isset($record->fields)) {

@@ -2,7 +2,7 @@
 
 class Lib_Test_TestFactory
 {
-    private $_logger;
+    private \Lib_Utils_FileLogger $_logger;
 
     private $_soapDir;
 

@@ -33,6 +33,13 @@ define("EMAIL_PRIORITY_LOWEST", 'Lowest');
 
 class Email
 {
+    public $bccSender;
+    public $emailPriority;
+    public $subject;
+    public $saveAsActivity;
+    public $replyTo;
+    public $useSignature;
+    public $senderDisplayName;
     public function setBccSender($bccSender)
     {
         $this->bccSender = $bccSender;
@@ -71,6 +78,17 @@ class Email
 
 class SingleEmailMessage extends Email
 {
+    public $bccAddresses;
+    public $charset;
+    public $htmlBody;
+    public $orgWideEmailAddressId;
+    public $plainTextBody;
+    public $targetObjectId;
+    public $templateId;
+    public $toAddresses;
+    public $whatId;
+    public $fileAttachments;
+    public $documentAttachments;
     public function __construct()
     {
     }
@@ -140,6 +158,9 @@ class SingleEmailMessage extends Email
 
 class MassEmailMessage extends Email
 {
+    public $templateId;
+    public $whatIds;
+    public $targetObjectIds;
     public function setTemplateId($templateId)
     {
         $this->templateId = $templateId;

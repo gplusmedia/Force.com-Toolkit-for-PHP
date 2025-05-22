@@ -14,7 +14,7 @@ class Lib_Test_Partner_QueryOptionsTest extends Lib_Test_TestAbstractPartner
         $this->_mySforceConnection->setQueryOptions($options);
         $response = $this->_mySforceConnection->query($query);
         $queryResult = new QueryResult($response);
-        !$done = false;
+        $done = false;
 
         echo "Size of records:  ".$queryResult->size;
 

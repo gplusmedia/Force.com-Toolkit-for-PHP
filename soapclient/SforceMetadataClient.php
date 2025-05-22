@@ -25,10 +25,13 @@
  * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-require_once('SforceMetaObject.php');
+require_once(__DIR__ . '/SforceMetaObject.php');
 
 class SforceMetadataClient
 {
+    /**
+     * @var \SoapClient
+     */
     public $sforce;
     protected $sessionId;
     protected $location;
@@ -36,7 +39,7 @@ class SforceMetadataClient
 
     protected $namespace = 'http://soap.sforce.com/2006/04/metadata';
 
-    public function __construct($wsdl, $loginResult, $sforceConn)
+    public function __construct($wsdl, $loginResult)
     {
 
         $soapClientArray = null;

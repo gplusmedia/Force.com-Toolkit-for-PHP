@@ -14,15 +14,15 @@ abstract class Lib_Test_TestAbstract
     protected $_password = 'qwqDbM3qD26eh0xIZhFmf7poWeYcTvrHq';
     protected $_token = 'D26eh0xIZhFmf7poWeYcTvrHq';
 
-    protected $_portalId = null;
+    protected $_portalId;
 
     protected $_mySforceConnection;
     protected $_mylogin;
     protected $_mySoapClient;
 
-    protected $_logger;
+    protected \Lib_Utils_FileLogger $_logger;
     protected $_soapDir;
-    protected $_phpVersion;
+    protected string $_phpVersion;
 
     protected $_medaDataWsdlName = 'metadata';
 
@@ -39,7 +39,6 @@ abstract class Lib_Test_TestAbstract
     }
 
     /**
-     * @param Lib_Utils_FileLogger $metaInfoLogger
      * @return void
      */
     public function run(Lib_Utils_FileLogger $metaInfoLogger)

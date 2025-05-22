@@ -36,7 +36,7 @@ class Lib_Test_Partner_CDUTest extends Lib_Test_TestAbstractPartner
         $ids = array();
         foreach ($createResponse as $createResult) {
             print_r($createResult);
-            array_push($ids, $createResult->id);
+            $ids[] = $createResult->id;
         }
         echo "**** Now for Delete:\r\n";
         $deleteResult = $this->_mySforceConnection->delete($ids);

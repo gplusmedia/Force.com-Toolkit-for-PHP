@@ -6,13 +6,11 @@
  */
 class Lib_Utils_FileLogger
 {
-    private $_filename;
     private $_hanlder;
     private $_withTimeStamps;
 
     public function __construct($filename, $mode = 'a+', $withTimeStamps = false)
     {
-        $this->_filename = $filename;
         $this->_hanlder = fopen($filename, $mode);
         $this->_withTimeStamps = $withTimeStamps;
     }

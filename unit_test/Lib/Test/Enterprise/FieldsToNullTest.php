@@ -24,7 +24,7 @@ class Lib_Test_Enterprise_FieldsToNullTest extends Lib_Test_TestAbstractEnterpri
         $sObject->fieldsToNull = array("Phone");
         $sObject->Id = $createResponse->id;
 
-        $updateResult = $this->_mySforceConnection->update(array($sObject), 'Contact');
+        $this->_mySforceConnection->update(array($sObject), 'Contact');
 
         $queryResult = $this->_mySforceConnection->retrieve("FirstName, LastName, Phone", "Contact", $createResponse->id);
         echo "***** After fieldsToNull\r\n";
