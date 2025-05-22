@@ -1,24 +1,25 @@
 <?php
+
 /**
- * This is PARTNER specific test. 
+ * This is PARTNER specific test.
  *
  */
 class Lib_Test_Partner_CallOptionsTest extends Lib_Test_TestAbstractPartner
 {
-	public function getTestName()
-	{
-		return 'CallOptions';
-	}
-	
-	protected function _run()
-	{	
-		$YOURCLIENTID = 'YourClientId';
-		$NAMESPACE = 'aNamespace';
+    public function getTestName()
+    {
+        return 'CallOptions';
+    }
 
-		$callOptionsHeader = new CallOptions($YOURCLIENTID, $NAMESPACE);
-		$this->_mySforceConnection->setCallOptions($callOptionsHeader);
-		$loginResult = $this->_mySforceConnection->login($this->_userName, $this->_password);
+    protected function _run()
+    {
+        $YOURCLIENTID = 'YourClientId';
+        $NAMESPACE = 'aNamespace';
 
-		print_r($loginResult);
-	}
+        $callOptionsHeader = new CallOptions($YOURCLIENTID, $NAMESPACE);
+        $this->_mySforceConnection->setCallOptions($callOptionsHeader);
+        $loginResult = $this->_mySforceConnection->login($this->_userName, $this->_password);
+
+        print_r($loginResult);
+    }
 }

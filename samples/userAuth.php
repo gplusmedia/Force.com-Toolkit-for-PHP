@@ -1,6 +1,7 @@
 <?php
+
 /*--------------------------------------------------------\
-|  Assign your USER ID & PASSWORD with TOKEN 
+|  Assign your USER ID & PASSWORD with TOKEN
 |  This file is included in each of the SAMPLES
 \--------------------------------------------------------*/
 
@@ -8,7 +9,7 @@ $USERNAME = "PUT YOUR salseforce USER NAME";
 $PASSWORD = "PUT YOUR PASSWORD along with TOKEN";
 
 /*--------------------------------------------------------\
-|  Create a Lead using the salesforce account 
+|  Create a Lead using the salesforce account
 |  Get the LEADID and modify it in following file
 |  userAuth.php in samples directory
 \--------------------------------------------------------*/
@@ -49,4 +50,3 @@ $EMAILIDFORHEADER = 'email1@test.com';
 //Need to login on account then create the lead
 //Assign that id here and check the sample
 $eLEADID = "00Q5000000DO0gJEAT";
-?>

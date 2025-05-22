@@ -1,38 +1,39 @@
 <?php
+
 class Lib_Test_Partner_SendEmailWithAttachTest extends Lib_Test_TestAbstractPartner
 {
-	public function getTestName()
-	{
-		return 'SendEmailWithAttach';
-	}
-	
-	protected function _run()
-	{
-		$EMAILID = 'hunter@barefootsolutions.com';
-		
-		$singleEmail1 = new SingleEmailMessage();
-		$singleEmail1->toAddresses = $EMAILID;
-		$singleEmail1->plainTextBody = "Hello there";
-		$singleEmail1->subject = "First Single Email";
-		$singleEmail1->saveAsActivity = true;
-		$singleEmail1->emailPriority = EMAIL_PRIORITY_LOW;
-		//  $singleEmail1->inReplyTo = "First Single Email";
+    public function getTestName()
+    {
+        return 'SendEmailWithAttach';
+    }
 
-		$filename = $this->_soapDir . '/earth.png';
-		$handle = fopen($filename, "rb");
-		$contents = fread($handle, filesize($filename));
-		fclose($handle);
-		$attachment = new stdclass();
-		$attachment->body = $contents;
-		$attachment->contentType = 'image/png';
-		$attachment->fileName = $filename;
-		$attachment->inline = TRUE;
+    protected function _run()
+    {
+        $EMAILID = 'hunter@barefootsolutions.com';
 
-		$singleEmail1->setFileAttachments(array($attachment));
+        $singleEmail1 = new SingleEmailMessage();
+        $singleEmail1->toAddresses = $EMAILID;
+        $singleEmail1->plainTextBody = "Hello there";
+        $singleEmail1->subject = "First Single Email";
+        $singleEmail1->saveAsActivity = true;
+        $singleEmail1->emailPriority = EMAIL_PRIORITY_LOW;
+        //  $singleEmail1->inReplyTo = "First Single Email";
 
-		echo "***** Send Emails *****\n";
-		$emailResponse = $this->_mySforceConnection->sendSingleEmail(array($singleEmail1));
+        $filename = $this->_soapDir . '/earth.png';
+        $handle = fopen($filename, "rb");
+        $contents = fread($handle, filesize($filename));
+        fclose($handle);
+        $attachment = new stdclass();
+        $attachment->body = $contents;
+        $attachment->contentType = 'image/png';
+        $attachment->fileName = $filename;
+        $attachment->inline = true;
 
-		print_r($emailResponse);
-	}
+        $singleEmail1->setFileAttachments(array($attachment));
+
+        echo "***** Send Emails *****\n";
+        $emailResponse = $this->_mySforceConnection->sendSingleEmail(array($singleEmail1));
+
+        print_r($emailResponse);
+    }
 }
