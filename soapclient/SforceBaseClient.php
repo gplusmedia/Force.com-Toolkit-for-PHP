@@ -732,7 +732,7 @@ class SforceBaseClient
      * @param string Type   Object Type
      * @return DescribeLayoutResult
      */
-    public function describeLayout($type, array $recordTypeIds = null)
+    public function describeLayout($type, ?array $recordTypeIds = null)
     {
         $this->setHeaders("describeLayout");
         $arg = new stdClass();
@@ -1057,24 +1057,24 @@ class QueryResult implements Iterator
     } // Dependency Injection
 
     // Basic Iterator implementation functions
-    public function rewind()
+    public function rewind(): void
     {
         $this->pointer = 0;
     }
-    public function next()
+    public function next(): void
     {
         ++$this->pointer;
     }
-    public function key()
+    public function key(): mixed
     {
         return $this->pointer;
     }
-    public function current()
+    public function current(): mixed
     {
         return new SObject($this->records[$this->pointer]);
     }
 
-    public function valid()
+    public function valid(): bool
     {
         while ($this->pointer >= count($this->records)) {
             // Pointer is larger than (current) result set; see if we can fetch more
